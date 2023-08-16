@@ -1,10 +1,7 @@
 package com.aryunin.skyengtask.entity;
 
 import jakarta.annotation.Nonnull;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Data
@@ -13,7 +10,8 @@ public class Package {
     public enum Type {LETTER, PACKAGE, PARCEL, POSTCARD};
     public enum Status {REGISTERED, OFFICE, TRANSPORT, HANDED}
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     @Nonnull
     @Enumerated(EnumType.STRING)
     private Type type;
