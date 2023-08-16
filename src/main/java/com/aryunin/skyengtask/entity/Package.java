@@ -3,9 +3,11 @@ package com.aryunin.skyengtask.entity;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
+@NoArgsConstructor
 public class Package {
     public enum Type {LETTER, PACKAGE, PARCEL, POSTCARD};
     public enum Status {REGISTERED, OFFICE, TRANSPORT, HANDED}
