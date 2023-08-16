@@ -16,7 +16,7 @@ import java.io.Serializable;
 public class PackageOfficeId implements Serializable {
     @ManyToOne
     @JoinColumn(name = "package_id", nullable = false)
-    private Package postPackage;
+    private PostalPackage postalPackage;
     @ManyToOne
     @JoinColumn(name = "office_index", nullable = false)
     private Office postOffice;

@@ -1,6 +1,6 @@
 package com.aryunin.skyengtask.dto;
 
-import com.aryunin.skyengtask.entity.Package.Status;
+import com.aryunin.skyengtask.entity.PostalPackage.Status;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

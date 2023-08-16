@@ -2,7 +2,7 @@ package com.aryunin.skyengtask.controller;
 
 import com.aryunin.skyengtask.dto.PackageDTO;
 import com.aryunin.skyengtask.dto.PackageTransportHistory;
-import com.aryunin.skyengtask.entity.Package;
+import com.aryunin.skyengtask.entity.PostalPackage;
 import com.aryunin.skyengtask.service.PostalService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +22,7 @@ public class PostalController {
     @PostMapping
     public ResponseEntity<String> registerPackage(@RequestBody PackageDTO packageDTO) {
         log.info("registering package");
-        var postPackage = modelMapper.map(packageDTO, Package.class);
+        var postPackage = modelMapper.map(packageDTO, PostalPackage.class);
         postalService.register(postPackage);
         log.info("the package has been registered");
         return ResponseEntity.created(URI.create("/")).body("The package has been successfully registered");
