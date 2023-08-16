@@ -1,5 +1,7 @@
 package com.aryunin.skyengtask.controller;
 
+import com.aryunin.skyengtask.dto.PackageDTO;
+import com.aryunin.skyengtask.dto.PackageTransportHistory;
 import com.aryunin.skyengtask.entity.Package;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
