@@ -16,6 +16,12 @@ databaseChangeLog:
                   type: varchar(32)
                   constraints:
                     nullable: false
+              - column:
+                  name: arrival_date
+                  type: date
+                  constraints:
+                    nullable: false
+                  defaultValueDate: CURRENT_DATE
         - addForeignKeyConstraint:
             baseTableName: package_office
             baseColumnNames: package_id
