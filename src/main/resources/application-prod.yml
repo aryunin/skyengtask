@@ -1,0 +1,15 @@
+spring:
+  main:
+    banner-mode: false
+#  datasource:
+#    url: jdbc:h2:file:./db
+#    driver-classname: org.h2.Driver
+#    username: sa
+#    password: password
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  liquibase:
+    enabled: true
+
+
+
