@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @NoArgsConstructor
-public class Package {
-    public enum Type {LETTER, PACKAGE, PARCEL, POSTCARD};
+public class PostalPackage {
+    public enum Type {LETTER, PACKAGE, PARCEL, POSTCARD}
     public enum Status {REGISTERED, OFFICE, TRANSPORT, HANDED}
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

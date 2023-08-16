@@ -4,7 +4,7 @@ import com.aryunin.skyengtask.dto.OfficeDTO;
 import com.aryunin.skyengtask.dto.PackageTransportHistory;
 import com.aryunin.skyengtask.dto.TransportHistoryElement;
 import com.aryunin.skyengtask.entity.Office;
-import com.aryunin.skyengtask.entity.Package;
+import com.aryunin.skyengtask.entity.PostalPackage;
 import com.aryunin.skyengtask.entity.PackageOffice;
 import com.aryunin.skyengtask.entity.PackageOfficeId;
 import com.aryunin.skyengtask.exception.InvalidStatusException;
@@ -32,9 +32,9 @@ public class PostalServiceImpl implements PostalService {
     private final ModelMapper modelMapper;
 
     @Override
-    public Package register(Package postPackage) {
-        postPackage.setStatus(Package.Status.REGISTERED);
-        var res = packagesRepository.save(postPackage);
+    public PostalPackage register(PostalPackage pkg) {
+        pkg.setStatus(PostalPackage.Status.REGISTERED);
+        var res = packagesRepository.save(pkg);
         log.info("package " + res.getId() + " has been saved");
         return res;
     }
@@ -56,7 +56,7 @@ public class PostalServiceImpl implements PostalService {
     }
 
     @Override
-    public Package depart(long packageId) {
+    public PostalPackage depart(long packageId) {
         var pkg = getPackageByID(packageId);
 
         log.info("checking for status");
@@ -67,7 +67,7 @@ public class PostalServiceImpl implements PostalService {
     }
 
     @Override
-    public Package issue(long packageId) {
+    public PostalPackage issue(long packageId) {
         var pkg = getPackageByID(packageId);
 
         log.info("checking for status");
@@ -97,12 +97,12 @@ public class PostalServiceImpl implements PostalService {
         return history;
     }
 
-    private PackageOffice createPackageOffice(Package pkg, Office office) {
+    private PackageOffice createPackageOffice(PostalPackage pkg, Office office) {
         var record = new PackageOffice();
         var id = new PackageOfficeId();
 
         id.setPostOffice(office);
-        id.setPostPackage(pkg);
+        id.setPostalPackage(pkg);
 
         var today = LocalDate.now();
         log.info("today is " + today.format(DateTimeFormatter.ISO_DATE));
@@ -113,36 +113,36 @@ public class PostalServiceImpl implements PostalService {
         return packageOfficeRepository.save(record);
     }
 
-    private Package checkStatusForIssue(Package pkg) {
+    private PostalPackage checkStatusForIssue(PostalPackage pkg) {
         var status = pkg.getStatus();
-        if(status != Package.Status.OFFICE) {
+        if(status != PostalPackage.Status.OFFICE) {
             log.info("invalid package status " + status.name());
             throw new InvalidStatusException("Invalid package's status " + status.name());
         }
         log.info("the status is correct, changing to HANDED");
-        pkg.setStatus(Package.Status.HANDED);
+        pkg.setStatus(PostalPackage.Status.HANDED);
         return packagesRepository.save(pkg);
     }
 
-    private Package checkStatusForDeparting(Package pkg) {
+    private PostalPackage checkStatusForDeparting(PostalPackage pkg) {
         var status = pkg.getStatus();
-        if(status != Package.Status.OFFICE) {
+        if(status != PostalPackage.Status.OFFICE) {
             log.info("invalid package status " + status.name());
             throw new InvalidStatusException("Invalid package's status " + status.name());
         }
         log.info("the status is correct, changing to TRANSPORT");
-        pkg.setStatus(Package.Status.TRANSPORT);
+        pkg.setStatus(PostalPackage.Status.TRANSPORT);
         return packagesRepository.save(pkg);
     }
 
-    private Package checkStatusForOffice(Package pkg) {
+    private PostalPackage checkStatusForOffice(PostalPackage pkg) {
         var status = pkg.getStatus();
-        if(status != Package.Status.TRANSPORT && status != Package.Status.REGISTERED) {
+        if(status != PostalPackage.Status.TRANSPORT && status != PostalPackage.Status.REGISTERED) {
             log.info("invalid package status " + status.name());
             throw new InvalidStatusException("Invalid package's status " + status.name());
         }
         log.info("the status is correct, changing to OFFICE");
-        pkg.setStatus(Package.Status.OFFICE);
+        pkg.setStatus(PostalPackage.Status.OFFICE);
         return packagesRepository.save(pkg);
     }
 
@@ -157,7 +157,7 @@ public class PostalServiceImpl implements PostalService {
         return found.get();
     }
 
-    private Package getPackageByID(Long id) {
+    private PostalPackage getPackageByID(Long id) {
         log.info("finding a package with id " + id);
         var found = packagesRepository.findById(id);
         if(found.isEmpty()) {
