@@ -5,18 +5,9 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
 import org.springframework.web.ErrorResponse;
 
-public class OfficeNotFoundException extends RuntimeException implements ErrorResponse {
+public class OfficeNotFoundException extends InvalidDataException {
+
     public OfficeNotFoundException(String message) {
         super(message);
-    }
-
-    @Override
-    public HttpStatusCode getStatusCode() {
-        return HttpStatus.BAD_REQUEST;
-    }
-
-    @Override
-    public ProblemDetail getBody() {
-        return ProblemDetail.forStatusAndDetail(getStatusCode(), getMessage());
     }
 }
