@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-office
+      author: aryunin
+      changes:
+        - createTable:
+            tableName: office
+            columns:
+              - column:
+                  name: index
+                  type: varchar(16)
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: varchar(256)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: address
+                  type: varchar(256)
+                  constraints:
+                    nullable: false
