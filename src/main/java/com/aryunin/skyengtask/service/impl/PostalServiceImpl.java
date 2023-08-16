@@ -48,17 +48,8 @@ public class PostalServiceImpl implements PostalService {
         pkg = checkStatusForOffice(pkg);
         log.info("status has been successfully changed");
 
-        var today = LocalDate.now();
-        log.info("today is " + today.format(DateTimeFormatter.ISO_DATE));
-
         log.info("creating a history record");
-        var record = new PackageOffice();
-        var id = new PackageOfficeId();
-        id.setPostOffice(office);
-        id.setPostPackage(pkg);
-        record.setId(id);
-        record.setArrivalDate(today);
-        packageOfficeRepository.save(record);
+        var record = createPackageOffice(pkg, office);
         log.info("record has been created & saved");
 
         return record;
@@ -104,6 +95,22 @@ public class PostalServiceImpl implements PostalService {
         history.setStatus(pkg.getStatus());
         log.info("history has been filled");
         return history;
+    }
+
+    private PackageOffice createPackageOffice(Package pkg, Office office) {
+        var record = new PackageOffice();
+        var id = new PackageOfficeId();
+
+        id.setPostOffice(office);
+        id.setPostPackage(pkg);
+
+        var today = LocalDate.now();
+        log.info("today is " + today.format(DateTimeFormatter.ISO_DATE));
+
+        record.setId(id);
+        record.setArrivalDate(today);
+
+        return packageOfficeRepository.save(record);
     }
 
     private Package checkStatusForIssue(Package pkg) {
