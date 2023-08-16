@@ -3,6 +3,7 @@ package com.aryunin.skyengtask.controller;
 import com.aryunin.skyengtask.dto.PackageDTO;
 import com.aryunin.skyengtask.dto.PackageTransportHistory;
 import com.aryunin.skyengtask.entity.Package;
+import com.aryunin.skyengtask.service.PostalService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -19,7 +20,7 @@ public class PostalController {
     private final ModelMapper modelMapper;
 
     @PostMapping
-    public ResponseEntity<String> registerPackage(PackageDTO packageDTO) {
+    public ResponseEntity<String> registerPackage(@RequestBody PackageDTO packageDTO) {
         log.info("registering package");
         var postPackage = modelMapper.map(packageDTO, Package.class);
         postalService.register(postPackage);
@@ -28,7 +29,7 @@ public class PostalController {
     }
 
     @PostMapping("/{packageId}/add-office/{officeId}")
-    public ResponseEntity<String> addOffice(@PathVariable int packageId,
+    public ResponseEntity<String> addOffice(@PathVariable long packageId,
                                             @PathVariable String officeId) {
         log.info("adding office " + officeId + " to package " + packageId );
         postalService.addOffice(packageId, officeId);
@@ -37,7 +38,7 @@ public class PostalController {
     }
 
     @PostMapping("/{packageId}/depart")
-    public ResponseEntity<String> departPackage(@PathVariable int packageId) {
+    public ResponseEntity<String> departPackage(@PathVariable long packageId) {
         log.info("departing package " + packageId);
         postalService.depart(packageId);
         log.info("the package has been successfully departed");
@@ -45,7 +46,7 @@ public class PostalController {
     }
 
     @DeleteMapping("/{packageId}")
-    public ResponseEntity<String> issuePackage(@PathVariable int packageId) {
+    public ResponseEntity<String> issuePackage(@PathVariable long packageId) {
         log.info("issuing package " + packageId);
         postalService.issue(packageId);
         log.info("the package has been successfully issued");
@@ -53,7 +54,7 @@ public class PostalController {
     }
 
     @GetMapping("/{packageId}")
-    public PackageTransportHistory getHistory(@PathVariable int packageId) {
+    public PackageTransportHistory getHistory(@PathVariable long packageId) {
         log.info("getting a history for package " + packageId);
         return postalService.getHistory(packageId);
     }
