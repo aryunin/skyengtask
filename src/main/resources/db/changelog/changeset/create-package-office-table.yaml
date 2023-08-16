@@ -1,0 +1,44 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-package-office
+      author: aryunin
+      changes:
+        - createTable:
+            tableName: package_office
+            columns:
+              - column:
+                  name: package_id
+                  type: varchar(32)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: office_index
+                  type: varchar(32)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: arrival_date
+                  type: date
+                  constraints:
+                    nullable: false
+                  defaultValueDate: CURRENT_DATE
+        - addForeignKeyConstraint:
+            baseTableName: package_office
+            baseColumnNames: package_id
+            constraintName: package_fk
+            referencedTableName: package
+            referencedColumnNames: id
+            onDelete: CASCADE
+            onUpdate: CASCADE
+        - addForeignKeyConstraint:
+            baseTableName: package_office
+            baseColumnNames: office_index
+            constraintName: office_fk
+            referencedTableName: office
+            referencedColumnNames: index
+            onDelete: CASCADE
+            onUpdate: CASCADE
+        - addPrimaryKey:
+            tableName: package_office
+            columnNames: package_id, office_index
+            constraintName: package_office_pk
