@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  api:
+    image: 'api:latest'
+    build:
+      context: .
+    container_name: api
+    depends_on: 
+      - db
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - DB_HOST=db
+      - DB_NAME=testdb
+      - DB_USER=postgres
+      - DB_PASSWORD=password
+    ports: 
+      - 8080:8080
+    restart: always
+
+  db:
+    image: 'postgres:latest'
+    container_name: db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=testdb
+    restart: always
+    volumes:
+      - pgdata:/var/lib/postgresql/data 
+      
+volumes:
+  pgdata:
