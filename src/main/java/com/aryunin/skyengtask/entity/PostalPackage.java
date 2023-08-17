@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @NoArgsConstructor
+@Table(name = "package")
 public class PostalPackage {
     public enum Type {LETTER, PACKAGE, PARCEL, POSTCARD}
     public enum Status {REGISTERED, OFFICE, TRANSPORT, HANDED}

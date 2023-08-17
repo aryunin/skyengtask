@@ -4,6 +4,8 @@ import com.aryunin.skyengtask.dto.PackageDTO;
 import com.aryunin.skyengtask.dto.PackageTransportHistory;
 import com.aryunin.skyengtask.entity.PostalPackage;
 import com.aryunin.skyengtask.service.PostalService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -15,11 +17,16 @@ import java.net.URI;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
+@Tag(name = "Postal Controller", description = "processing packages")
 public class PostalController {
     private final PostalService postalService;
     private final ModelMapper modelMapper;
 
-    @PostMapping
+    @Operation(
+            summary = "Register a package",
+            description = "Registering a package"
+    )
+    @PostMapping(produces = "application/json")
     public ResponseEntity<String> registerPackage(@RequestBody PackageDTO packageDTO) {
         log.info("registering package");
         var postPackage = modelMapper.map(packageDTO, PostalPackage.class);
@@ -28,7 +35,11 @@ public class PostalController {
         return ResponseEntity.created(URI.create("/")).body("The package has been successfully registered");
     }
 
-    @PostMapping("/{packageId}/add-office/{officeId}")
+    @Operation(
+            summary = "Add the office to a package",
+            description = "Simulation of the arrival of a package in the office"
+    )
+    @PostMapping(value = "/{packageId}/add-office/{officeId}", produces = "application/json")
     public ResponseEntity<String> addOffice(@PathVariable long packageId,
                                             @PathVariable String officeId) {
         log.info("adding office " + officeId + " to package " + packageId );
@@ -37,7 +48,11 @@ public class PostalController {
         return ResponseEntity.ok().body("The office has been successfully added");
     }
 
-    @PostMapping("/{packageId}/depart")
+    @Operation(
+            summary = "Depart a package",
+            description = "Simulation of departing a package"
+    )
+    @PostMapping(value = "/{packageId}/depart", produces = "application/json")
     public ResponseEntity<String> departPackage(@PathVariable long packageId) {
         log.info("departing package " + packageId);
         postalService.depart(packageId);
@@ -45,7 +60,11 @@ public class PostalController {
         return ResponseEntity.ok().body("The package has been successfully departed");
     }
 
-    @DeleteMapping("/{packageId}")
+    @Operation(
+            summary = "Issue a package",
+            description = "Simulation of issuing a package"
+    )
+    @DeleteMapping(value = "/{packageId}", produces = "application/json")
     public ResponseEntity<String> issuePackage(@PathVariable long packageId) {
         log.info("issuing package " + packageId);
         postalService.issue(packageId);
@@ -53,7 +72,11 @@ public class PostalController {
         return ResponseEntity.ok().body("The package has been successfully issued");
     }
 
-    @GetMapping("/{packageId}")
+    @Operation(
+            summary = "Transport history",
+            description = "Getting the history of package transportation"
+    )
+    @GetMapping(value = "/{packageId}", produces = "application/json")
     public PackageTransportHistory getHistory(@PathVariable long packageId) {
         log.info("getting a history for package " + packageId);
         return postalService.getHistory(packageId);
