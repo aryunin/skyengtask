@@ -1,0 +1,187 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > PostalController</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.aryunin.skyengtask.controller</a>
+</div>
+
+<h1>Coverage Summary for Class: PostalController (com.aryunin.skyengtask.controller)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">PostalController</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    28,6%
+  </span>
+  <span class="absValue">
+    (2/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    9,5%
+  </span>
+  <span class="absValue">
+    (2/21)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.aryunin.skyengtask.controller;
+&nbsp;
+&nbsp;import com.aryunin.skyengtask.dto.PackageDTO;
+&nbsp;import com.aryunin.skyengtask.dto.PackageTransportHistory;
+&nbsp;import com.aryunin.skyengtask.entity.PostalPackage;
+&nbsp;import com.aryunin.skyengtask.service.PostalService;
+&nbsp;import io.swagger.v3.oas.annotations.Operation;
+&nbsp;import io.swagger.v3.oas.annotations.tags.Tag;
+&nbsp;import lombok.RequiredArgsConstructor;
+&nbsp;import lombok.extern.slf4j.Slf4j;
+&nbsp;import org.modelmapper.ModelMapper;
+&nbsp;import org.springframework.http.ResponseEntity;
+&nbsp;import org.springframework.web.bind.annotation.*;
+&nbsp;
+&nbsp;import java.net.URI;
+&nbsp;
+&nbsp;@RestController
+<b class="fc">&nbsp;@RequiredArgsConstructor</b>
+<b class="fc">&nbsp;@Slf4j</b>
+&nbsp;@Tag(name = &quot;Postal Controller&quot;, description = &quot;processing packages&quot;)
+&nbsp;public class PostalController {
+&nbsp;    private final PostalService postalService;
+&nbsp;    private final ModelMapper modelMapper;
+&nbsp;
+&nbsp;    @Operation(
+&nbsp;            summary = &quot;Register a package&quot;,
+&nbsp;            description = &quot;Registering a package&quot;
+&nbsp;    )
+&nbsp;    @PostMapping(produces = &quot;application/json&quot;)
+&nbsp;    public ResponseEntity&lt;String&gt; registerPackage(@RequestBody PackageDTO packageDTO) {
+<b class="nc">&nbsp;        log.info(&quot;registering package&quot;);</b>
+<b class="nc">&nbsp;        var postPackage = modelMapper.map(packageDTO, PostalPackage.class);</b>
+<b class="nc">&nbsp;        postalService.register(postPackage);</b>
+<b class="nc">&nbsp;        log.info(&quot;the package has been registered&quot;);</b>
+<b class="nc">&nbsp;        return ResponseEntity.created(URI.create(&quot;/&quot;)).body(&quot;The package has been successfully registered&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Operation(
+&nbsp;            summary = &quot;Add the office to a package&quot;,
+&nbsp;            description = &quot;Simulation of the arrival of a package in the office&quot;
+&nbsp;    )
+&nbsp;    @PostMapping(value = &quot;/{packageId}/add-office/{officeId}&quot;, produces = &quot;application/json&quot;)
+&nbsp;    public ResponseEntity&lt;String&gt; addOffice(@PathVariable long packageId,
+&nbsp;                                            @PathVariable String officeId) {
+<b class="nc">&nbsp;        log.info(&quot;adding office &quot; + officeId + &quot; to package &quot; + packageId );</b>
+<b class="nc">&nbsp;        postalService.addOffice(packageId, officeId);</b>
+<b class="nc">&nbsp;        log.info(&quot;the office has been successfully added&quot;);</b>
+<b class="nc">&nbsp;        return ResponseEntity.ok().body(&quot;The office has been successfully added&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Operation(
+&nbsp;            summary = &quot;Depart a package&quot;,
+&nbsp;            description = &quot;Simulation of departing a package&quot;
+&nbsp;    )
+&nbsp;    @PostMapping(value = &quot;/{packageId}/depart&quot;, produces = &quot;application/json&quot;)
+&nbsp;    public ResponseEntity&lt;String&gt; departPackage(@PathVariable long packageId) {
+<b class="nc">&nbsp;        log.info(&quot;departing package &quot; + packageId);</b>
+<b class="nc">&nbsp;        postalService.depart(packageId);</b>
+<b class="nc">&nbsp;        log.info(&quot;the package has been successfully departed&quot;);</b>
+<b class="nc">&nbsp;        return ResponseEntity.ok().body(&quot;The package has been successfully departed&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Operation(
+&nbsp;            summary = &quot;Issue a package&quot;,
+&nbsp;            description = &quot;Simulation of issuing a package&quot;
+&nbsp;    )
+&nbsp;    @DeleteMapping(value = &quot;/{packageId}&quot;, produces = &quot;application/json&quot;)
+&nbsp;    public ResponseEntity&lt;String&gt; issuePackage(@PathVariable long packageId) {
+<b class="nc">&nbsp;        log.info(&quot;issuing package &quot; + packageId);</b>
+<b class="nc">&nbsp;        postalService.issue(packageId);</b>
+<b class="nc">&nbsp;        log.info(&quot;the package has been successfully issued&quot;);</b>
+<b class="nc">&nbsp;        return ResponseEntity.ok().body(&quot;The package has been successfully issued&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Operation(
+&nbsp;            summary = &quot;Transport history&quot;,
+&nbsp;            description = &quot;Getting the history of package transportation&quot;
+&nbsp;    )
+&nbsp;    @GetMapping(value = &quot;/{packageId}&quot;, produces = &quot;application/json&quot;)
+&nbsp;    public PackageTransportHistory getHistory(@PathVariable long packageId) {
+<b class="nc">&nbsp;        log.info(&quot;getting a history for package &quot; + packageId);</b>
+<b class="nc">&nbsp;        return postalService.getHistory(packageId);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-08-17 13:13</div>
+</div>
+</body>
+</html>
