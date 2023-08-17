@@ -13,6 +13,8 @@ import com.aryunin.skyengtask.exception.PackageNotFoundException;
 import com.aryunin.skyengtask.repository.OfficesRepository;
 import com.aryunin.skyengtask.repository.PackageOfficeRepository;
 import com.aryunin.skyengtask.repository.PackagesRepository;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -40,6 +42,22 @@ class PostalServiceTest {
     private ModelMapper modelMapper;
     @InjectMocks
     private PostalServiceImpl postalService;
+    private PostalPackage pkg;
+
+    @BeforeEach
+    void setUp() {
+        pkg = new PostalPackage();
+        pkg.setId(1L);
+        pkg.setType(PostalPackage.Type.LETTER);
+        pkg.setRecipientAddress("address");
+        pkg.setRecipientName("name");
+        pkg.setRecipientIndex("index");
+    }
+
+    @AfterEach
+    void tearDown() {
+        pkg = null;
+    }
 
     @Test
     void register() {
@@ -49,29 +67,15 @@ class PostalServiceTest {
         data.setRecipientName("name");
         data.setRecipientIndex("index");
 
-        var expected = new PostalPackage();
-        expected.setId(1L);
-        expected.setType(PostalPackage.Type.LETTER);
-        expected.setRecipientAddress("address");
-        expected.setRecipientName("name");
-        expected.setRecipientIndex("index");
-
-        Mockito.when(packagesRepository.save(Mockito.any())).thenReturn(expected);
+        Mockito.when(packagesRepository.save(Mockito.any())).thenReturn(pkg);
         var actual = postalService.register(data);
         Mockito.verify(packagesRepository, Mockito.times(1)).save(Mockito.any());
 
-        assertEquals(expected.getStatus(), actual.getStatus());
+        assertEquals(pkg.getStatus(), actual.getStatus());
     }
 
     @Test
     void addOffice() {
-        var pkg = new PostalPackage();
-        pkg.setId(1L);
-        pkg.setType(PostalPackage.Type.LETTER);
-        pkg.setRecipientAddress("address");
-        pkg.setRecipientName("name");
-        pkg.setRecipientIndex("index");
-
         var office = new Office();
         office.setIndex("123456");
         office.setName("name");
@@ -125,13 +129,6 @@ class PostalServiceTest {
 
     @Test
     void depart() {
-        var pkg = new PostalPackage();
-        pkg.setId(1L);
-        pkg.setType(PostalPackage.Type.LETTER);
-        pkg.setRecipientAddress("address");
-        pkg.setRecipientName("name");
-        pkg.setRecipientIndex("index");
-
         Mockito.when(packagesRepository.findById(1L)).thenReturn(Optional.of(pkg));
         Mockito.when(packagesRepository.findById(2L)).thenReturn(Optional.empty());
         Mockito.when(packagesRepository.save(Mockito.any())).thenReturn(pkg);
@@ -164,13 +161,6 @@ class PostalServiceTest {
 
     @Test
     void issue() {
-        var pkg = new PostalPackage();
-        pkg.setId(1L);
-        pkg.setType(PostalPackage.Type.LETTER);
-        pkg.setRecipientAddress("address");
-        pkg.setRecipientName("name");
-        pkg.setRecipientIndex("index");
-
         Mockito.when(packagesRepository.findById(1L)).thenReturn(Optional.of(pkg));
         Mockito.when(packagesRepository.findById(2L)).thenReturn(Optional.empty());
         Mockito.when(packagesRepository.save(Mockito.any())).thenReturn(pkg);
@@ -203,14 +193,6 @@ class PostalServiceTest {
 
     @Test
     void getHistory() {
-        var pkg = new PostalPackage();
-        pkg.setId(1L);
-        pkg.setType(PostalPackage.Type.LETTER);
-        pkg.setRecipientAddress("address");
-        pkg.setRecipientName("name");
-        pkg.setRecipientIndex("index");
-        pkg.setStatus(PostalPackage.Status.TRANSPORT);
-
         Mockito.when(packagesRepository.findById(1L)).thenReturn(Optional.of(pkg));
         Mockito.when(packagesRepository.findById(2L)).thenReturn(Optional.empty());
 
