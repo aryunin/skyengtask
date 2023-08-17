@@ -1,0 +1,41 @@
+databaseChangeLog:
+  - changeSet:
+      id: import-offices
+      author: aryunin
+      changes:
+        - insert:
+            tableName: office
+            columns:
+              - column:
+                  name: index
+                  value: "603152"
+              - column:
+                  name: name
+                  value: "ГОПС"
+              - column:
+                  name: address
+                  value: "Кащенко ул, 21, г Нижний Новгород, Нижегородская обл"
+        - insert:
+            tableName: office
+            columns:
+              - column:
+                  name: index
+                  value: "603163"
+              - column:
+                  name: name
+                  value: "ГОПС"
+              - column:
+                  name: address
+                  value: "Нижегородская обл, г Нижний Новгород, Бринского ул, 1, к.1"
+        - insert:
+            tableName: office
+            columns:
+              - column:
+                  name: index
+                  value: "603136"
+              - column:
+                  name: name
+                  value: "ГОПС"
+              - column:
+                  name: address
+                  value: "Нижегородская обл, г Нижний Новгород, 60-Летия Октября б-р, 3"
